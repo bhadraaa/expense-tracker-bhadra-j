@@ -317,6 +317,25 @@ header button,
 
 
 @media (max-width: 600px) {
+    header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    header button {
+        width: 100%;
+    }
+
+    .filters {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    #category-filter {
+        grid-column: 1 / -1;
+        width: 100%;
+    }
+
     .transaction {
         align-items: flex-start;
     }
@@ -334,5 +353,39 @@ header button,
     .edit-btn,
     .delete-btn {
         width: 60px;
+    }
+
+    .monthly-values {
+        justify-content: space-between;
+        gap: 20px;
+    }
+
+    .modal {
+        padding: 15px;
+    }
+
+    .modal .form-section {
+        max-height: 95vh;
+    }
+}
+@media (max-width: 768px) {
+    .container {
+        padding: 20px 15px;
+    }
+
+    .summary {
+        grid-template-columns: 1fr;
+    }
+
+    header {
+        gap: 15px;
+    }
+
+    .filters {
+        flex-wrap: wrap;
+    }
+
+    #category-filter {
+        margin-left: 0;
     }
 }
