@@ -192,22 +192,25 @@ function displayTransactions() {
         transactionElement.className = "transaction";
 
         transactionElement.innerHTML = `
-            <div>
+            <div class="transaction-details">
                 <strong>${transaction.description}</strong>
                 <p>${transaction.category} • ${transaction.date}</p>
             </div>
 
-            <div>
-                <strong>
+            <div class="transaction-right">
+                <strong class="transaction-amount ${transaction.type}">
                     ${transaction.type === "income" ? "+" : "-"}₹${transaction.amount.toFixed(2)}
                 </strong>
-                <button class="edit-btn" data-id="${transaction.id}">
-                    Edit
-                </button>
-                <button class="delete-btn" data-id="${transaction.id}">
-                    Delete
-                </button>
-                
+
+                <div class="transaction-actions">
+                    <button class="edit-btn" data-id="${transaction.id}">
+                        Edit
+                    </button>
+
+                    <button class="delete-btn" data-id="${transaction.id}">
+                        Delete
+                    </button>
+                </div>
             </div>
         `;
 
@@ -315,24 +318,37 @@ function updateCategorySummary() {
     });
 
     const categoriesUsed = Object.keys(categoryTotals);
+    const chart = document.getElementById("category-chart");
 
     if (categoriesUsed.length === 0) {
-        document.getElementById("category-chart").innerHTML =
-            "<p>No expenses to display.</p>";
+        chart.innerHTML = "<p>No expenses to display.</p>";
         return;
     }
 
-    document.getElementById("category-chart").innerHTML = "";
+    const highestAmount = Math.max(...Object.values(categoryTotals));
+
+    chart.innerHTML = "";
 
     categoriesUsed.forEach(function (category) {
+        const percentage =
+            (categoryTotals[category] / highestAmount) * 100;
+
         const categoryElement = document.createElement("div");
 
+        categoryElement.className = "category-item";
+
         categoryElement.innerHTML = `
-            <strong>${category}</strong>
-            <span>₹${categoryTotals[category].toFixed(2)}</span>
+            <div class="category-info">
+                <strong>${category}</strong>
+                <span>₹${categoryTotals[category].toFixed(2)}</span>
+            </div>
+
+            <div class="category-bar">
+                <div class="category-fill" style="width: ${percentage}%"></div>
+            </div>
         `;
 
-        document.getElementById("category-chart").appendChild(categoryElement);
+        chart.appendChild(categoryElement);
     });
 }
 
