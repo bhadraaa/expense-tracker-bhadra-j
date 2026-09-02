@@ -137,8 +137,19 @@ header button,
     font-size: 18px;
 }
 
+#empty-message {
+    text-align: center;
+    color: #888;
+    padding: 30px;
+}
 
-
+.transaction {
+    display: grid;
+    grid-template-columns: 1fr 120px 100px;
+    gap: 15px;
+    padding: 14px 18px;
+    border-bottom: 1px solid #eee;
+}
 
 .transaction .date {
     color: #888;
@@ -187,5 +198,33 @@ header button,
     margin-bottom: 8px;
 }
 
+.type-btn.active {
+    border-color: #2f6b4f;
+}
 
+#save-btn {
+    border-radius: 6px;
+}
+
+.hidden {
+    display: none;
+}
+
+
+
+
+.monthly-summary,
+.category-summary {
+    margin-bottom: 20px;
+}
+
+.monthly-values {
+    display: flex;
+    gap: 50px;
+    padding: 18px;
+}
+
+#category-chart {
+    padding: 18px;
+}
 

@@ -1,4 +1,3 @@
-
 const form = document.getElementById("transaction-form");
 const formSection = document.getElementById("form-section");
 
@@ -42,3 +41,45 @@ const categories = {
 };
 
 
+const addButton = document.getElementById("add-btn");
+const cancelButton = document.getElementById("cancel-btn");
+
+addButton.addEventListener("click", function () {
+    formSection.classList.remove("hidden");
+});
+
+cancelButton.addEventListener("click", function () {
+    formSection.classList.add("hidden");
+});
+
+const typeButtons = document.querySelectorAll(".type-btn");
+
+typeButtons.forEach(function (button) {
+    button.addEventListener("click", function () {
+
+        currentType = button.dataset.type;
+
+        typeButtons.forEach(function (btn) {
+            btn.classList.remove("active");
+        });
+
+        button.classList.add("active");
+
+        updateCategories();
+    });
+});
+
+function updateCategories() {
+    categoryInput.innerHTML = '<option value="">Select category</option>';
+
+    categories[currentType].forEach(function (category) {
+        const option = document.createElement("option");
+
+        option.value = category;
+        option.textContent = category;
+
+        categoryInput.appendChild(option);
+    });
+}
+
+updateCategories();
