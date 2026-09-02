@@ -51,6 +51,9 @@ header button,
     border-radius: 6px;
 }
 
+
+/* Summary */
+
 .summary {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -105,7 +108,7 @@ header button,
 #category-filter,
 .type-btn,
 #cancel-btn {
-    padding: 4px 14px;
+    padding: 8px 14px;
     border: 1px solid #ddd;
     background: white;
     border-radius: 6px;
@@ -117,6 +120,71 @@ header button,
 
 #category-filter {
     margin-left: auto;
+}
+
+
+
+
+.transactions {
+    margin-bottom: 20px;
+}
+
+.transactions h2,
+.monthly-summary h2,
+.category-summary h2 {
+    padding: 16px 18px;
+    border-bottom: 1px solid #eee;
+    font-size: 18px;
+}
+
+
+
+
+.transaction .date {
+    color: #888;
+    font-size: 13px;
+}
+
+.transaction .amount {
+    text-align: right;
+    font-weight: bold;
+}
+
+.transaction button {
+    border: none;
+    background: none;
+    margin-left: 5px;
+}
+
+
+
+
+.form-section {
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.form-section h2 {
+    margin-bottom: 15px;
+}
+
+.form-section form {
+    display: grid;
+    gap: 8px;
+}
+
+.form-section input,
+.form-section select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.type-buttons,
+.form-buttons {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
 }
 
 
