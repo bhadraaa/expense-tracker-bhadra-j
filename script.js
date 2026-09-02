@@ -97,7 +97,7 @@ form.addEventListener("submit", function (event) {
     };
 
     transactions.push(transaction);
-
+    displayTransactions();
     console.log(transactions);
 
     form.reset();
@@ -116,6 +116,7 @@ form.addEventListener("submit", function (event) {
 
     showMessage("Transaction added successfully!");
 });
+
 function showMessage(message) {
     const messageElement = document.createElement("p");
 
@@ -127,4 +128,28 @@ function showMessage(message) {
     setTimeout(function () {
         messageElement.remove();
     }, 2000);
+}
+
+
+function displayTransactions() {
+    transactionList.innerHTML = "";
+
+    transactions.forEach(function (transaction) {
+        const transactionElement = document.createElement("div");
+
+        transactionElement.className = "transaction";
+
+        transactionElement.innerHTML = `
+            <div>
+                <strong>${transaction.description}</strong>
+                <p>${transaction.category} • ${transaction.date}</p>
+            </div>
+
+            <strong>
+                ${transaction.type === "income" ? "+" : "-"}₹${transaction.amount.toFixed(2)}
+            </strong>
+        `;
+
+        transactionList.appendChild(transactionElement);
+    });
 }
