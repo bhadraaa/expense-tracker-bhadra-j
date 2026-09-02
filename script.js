@@ -132,6 +132,7 @@ form.addEventListener("submit", function (event) {
     displayTransactions();
     updateSummary();
     updateMonthlySummary();
+    updateCategorySummary();
 
     console.log(transactions);
 
@@ -228,6 +229,7 @@ transactionList.addEventListener("click", function (event) {
         displayTransactions();
         updateSummary();
         updateMonthlySummary();
+        updateCategorySummary();
     }
 
     if (event.target.classList.contains("edit-btn")) {
@@ -299,6 +301,40 @@ function updateMonthlySummary() {
     monthIncomeElement.textContent = `₹${monthIncome.toFixed(2)}`;
     monthExpensesElement.textContent = `₹${monthExpenses.toFixed(2)}`;
 }
+function updateCategorySummary() {
+    const categoryTotals = {};
+
+    transactions.forEach(function (transaction) {
+        if (transaction.type === "expense") {
+            if (!categoryTotals[transaction.category]) {
+                categoryTotals[transaction.category] = 0;
+            }
+
+            categoryTotals[transaction.category] += transaction.amount;
+        }
+    });
+
+    const categoriesUsed = Object.keys(categoryTotals);
+
+    if (categoriesUsed.length === 0) {
+        document.getElementById("category-chart").innerHTML =
+            "<p>No expenses to display.</p>";
+        return;
+    }
+
+    document.getElementById("category-chart").innerHTML = "";
+
+    categoriesUsed.forEach(function (category) {
+        const categoryElement = document.createElement("div");
+
+        categoryElement.innerHTML = `
+            <strong>${category}</strong>
+            <span>₹${categoryTotals[category].toFixed(2)}</span>
+        `;
+
+        document.getElementById("category-chart").appendChild(categoryElement);
+    });
+}
 
 function saveTransactions() {
     localStorage.setItem("transactions", JSON.stringify(transactions));
@@ -314,6 +350,7 @@ loadTransactions();
 displayTransactions();
 updateSummary();
 updateMonthlySummary();
+updateCategorySummary();
 const filterButtons = document.querySelectorAll(".filter");
 
 filterButtons.forEach(function (button) {
