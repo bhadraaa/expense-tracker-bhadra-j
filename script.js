@@ -12,6 +12,8 @@ const balanceElement = document.getElementById("balance");
 const incomeElement = document.getElementById("income");
 const expensesElement = document.getElementById("expenses");
 
+const monthIncomeElement = document.getElementById("month-income");
+const monthExpensesElement = document.getElementById("month-expenses");
 
 let transactions = []; 
 let currentType = "expense"; 
@@ -46,6 +48,8 @@ const cancelButton = document.getElementById("cancel-btn");
 
 addButton.addEventListener("click", function () {
     formSection.classList.remove("hidden");
+    const today = new Date().toISOString().split("T")[0];
+    dateInput.value = today;
 });
 
 cancelButton.addEventListener("click", function () {
@@ -127,6 +131,7 @@ form.addEventListener("submit", function (event) {
     updateCategoryFilter();
     displayTransactions();
     updateSummary();
+    updateMonthlySummary();
 
     console.log(transactions);
 
@@ -222,6 +227,7 @@ transactionList.addEventListener("click", function (event) {
         updateCategoryFilter();
         displayTransactions();
         updateSummary();
+        updateMonthlySummary();
     }
 
     if (event.target.classList.contains("edit-btn")) {
@@ -274,6 +280,25 @@ function updateSummary() {
     expensesElement.textContent = `₹${totalExpenses.toFixed(2)}`;
     balanceElement.textContent = `₹${balance.toFixed(2)}`;
 }
+function updateMonthlySummary() {
+    const currentMonth = new Date().toISOString().slice(0, 7);
+
+    let monthIncome = 0;
+    let monthExpenses = 0;
+
+    transactions.forEach(function (transaction) {
+        if (transaction.date.startsWith(currentMonth)) {
+            if (transaction.type === "income") {
+                monthIncome += transaction.amount;
+            } else {
+                monthExpenses += transaction.amount;
+            }
+        }
+    });
+
+    monthIncomeElement.textContent = `₹${monthIncome.toFixed(2)}`;
+    monthExpensesElement.textContent = `₹${monthExpenses.toFixed(2)}`;
+}
 
 function saveTransactions() {
     localStorage.setItem("transactions", JSON.stringify(transactions));
@@ -288,6 +313,7 @@ function loadTransactions() {
 loadTransactions();
 displayTransactions();
 updateSummary();
+updateMonthlySummary();
 const filterButtons = document.querySelectorAll(".filter");
 
 filterButtons.forEach(function (button) {
