@@ -86,9 +86,22 @@ updateCategories();
 
 form.addEventListener("submit", function (event) {
     event.preventDefault();
+    if (
+        amountInput.value === "" ||
+        categoryInput.value === "" ||
+        dateInput.value === "" ||
+        descriptionInput.value.trim() === ""
+    ) {
+        showMessage("Please fill in all fields.");
+        return;
+    }
 
+    if (Number(amountInput.value) <= 0) {
+        showMessage("Amount must be greater than 0.");
+        return;
+    }
     const transaction = {
-        id: Date.now(),
+        id: editingId || Date.now(),
         type: currentType,
         amount: Number(amountInput.value),
         category: categoryInput.value,
@@ -96,14 +109,32 @@ form.addEventListener("submit", function (event) {
         description: descriptionInput.value
     };
 
-    transactions.push(transaction);
+    if (editingId === null) {
+        transactions.push(transaction);
+        showMessage("Transaction added successfully!");
+    } else {
+        transactions = transactions.map(function (item) {
+            if (item.id === editingId) {
+                return transaction;
+            }
+
+            return item;
+        });
+
+        showMessage("Transaction updated successfully!");
+    }
+
     displayTransactions();
     updateSummary();
+
     console.log(transactions);
 
     form.reset();
 
+    editingId = null;
     currentType = "expense";
+    document.getElementById("form-title").textContent = "Add Transaction";
+    document.getElementById("save-btn").textContent = "Add Transaction";
 
     typeButtons.forEach(function (button) {
         button.classList.remove("active");
@@ -114,8 +145,6 @@ form.addEventListener("submit", function (event) {
     updateCategories();
 
     formSection.classList.add("hidden");
-
-    showMessage("Transaction added successfully!");
 });
 
 function showMessage(message) {
@@ -185,7 +214,8 @@ transactionList.addEventListener("click", function (event) {
         });
 
         editingId = id;
-
+        document.getElementById("form-title").textContent = "Edit Transaction";
+        document.getElementById("save-btn").textContent = "Save Changes";
         formSection.classList.remove("hidden");
 
         amountInput.value = transaction.amount;
