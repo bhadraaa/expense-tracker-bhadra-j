@@ -17,8 +17,8 @@ let transactions = [];
 let currentType = "expense"; 
 let editingId = null;
 
-
-
+let activeFilter = "all";
+let activeCategory = "all";
 const categories = {
     expense: [
         "Food",
@@ -124,6 +124,7 @@ form.addEventListener("submit", function (event) {
         showMessage("Transaction updated successfully!");
     }
     saveTransactions();
+    updateCategoryFilter();
     displayTransactions();
     updateSummary();
 
@@ -162,9 +163,24 @@ function showMessage(message) {
 
 
 function displayTransactions() {
-    transactionList.innerHTML = "";
+     transactionList.innerHTML = "";
 
-    transactions.forEach(function (transaction) {
+    const filteredTransactions = transactions.filter(function (transaction) {
+        const typeMatch =
+            activeFilter === "all" || transaction.type === activeFilter;
+
+        const categoryMatch =
+            activeCategory === "all" || transaction.category === activeCategory;
+
+        return typeMatch && categoryMatch;
+    });
+
+    if (filteredTransactions.length === 0) {
+        transactionList.innerHTML = "<p>No transactions found.</p>";
+        return;
+    }
+
+    filteredTransactions.forEach(function (transaction) {
         const transactionElement = document.createElement("div");
 
         transactionElement.className = "transaction";
@@ -203,7 +219,7 @@ transactionList.addEventListener("click", function (event) {
             return transaction.id !== id;
         });
         saveTransactions();
-
+        updateCategoryFilter();
         displayTransactions();
         updateSummary();
     }
@@ -272,3 +288,51 @@ function loadTransactions() {
 loadTransactions();
 displayTransactions();
 updateSummary();
+const filterButtons = document.querySelectorAll(".filter");
+
+filterButtons.forEach(function (button) {
+    button.addEventListener("click", function () {
+        activeFilter = button.dataset.type;
+
+        filterButtons.forEach(function (btn) {
+            btn.classList.remove("active");
+        });
+
+        button.classList.add("active");
+
+        displayTransactions();
+    });
+});
+const categoryFilter = document.getElementById("category-filter");
+
+categoryFilter.addEventListener("change", function () {
+    activeCategory = categoryFilter.value;
+
+    displayTransactions();
+});
+function updateCategoryFilter() {
+    const currentValue = categoryFilter.value;
+
+    categoryFilter.innerHTML = '<option value="all">All Categories</option>';
+
+    const usedCategories = [];
+
+    transactions.forEach(function (transaction) {
+        if (!usedCategories.includes(transaction.category)) {
+            usedCategories.push(transaction.category);
+        }
+    });
+
+    usedCategories.forEach(function (category) {
+        const option = document.createElement("option");
+
+        option.value = category;
+        option.textContent = category;
+
+        categoryFilter.appendChild(option);
+    });
+
+    if (usedCategories.includes(currentValue)) {
+        categoryFilter.value = currentValue;
+    }
+}
