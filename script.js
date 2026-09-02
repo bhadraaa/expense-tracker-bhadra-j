@@ -146,14 +146,69 @@ function displayTransactions() {
                 <p>${transaction.category} • ${transaction.date}</p>
             </div>
 
-            <strong>
-                ${transaction.type === "income" ? "+" : "-"}₹${transaction.amount.toFixed(2)}
-            </strong>
+            <div>
+                <strong>
+                    ${transaction.type === "income" ? "+" : "-"}₹${transaction.amount.toFixed(2)}
+                </strong>
+                <button class="edit-btn" data-id="${transaction.id}">
+                    Edit
+                </button>
+                <button class="delete-btn" data-id="${transaction.id}">
+                    Delete
+                </button>
+                
+            </div>
         `;
 
         transactionList.appendChild(transactionElement);
     });
 }
+
+transactionList.addEventListener("click", function (event) {
+
+    const id = Number(event.target.dataset.id);
+
+    if (event.target.classList.contains("delete-btn")) {
+
+        transactions = transactions.filter(function (transaction) {
+            return transaction.id !== id;
+        });
+
+        displayTransactions();
+        updateSummary();
+    }
+
+    if (event.target.classList.contains("edit-btn")) {
+
+        const transaction = transactions.find(function (transaction) {
+            return transaction.id === id;
+        });
+
+        editingId = id;
+
+        formSection.classList.remove("hidden");
+
+        amountInput.value = transaction.amount;
+        dateInput.value = transaction.date;
+        descriptionInput.value = transaction.description;
+
+        currentType = transaction.type;
+
+        typeButtons.forEach(function (button) {
+            button.classList.remove("active");
+        });
+
+        document
+            .querySelector(`.type-btn[data-type="${currentType}"]`)
+            .classList.add("active");
+
+        updateCategories();
+
+        categoryInput.value = transaction.category;
+    }
+});
+
+
 function updateSummary() {
     let totalIncome = 0;
     let totalExpenses = 0;

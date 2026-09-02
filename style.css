@@ -237,3 +237,9 @@ header button,
     color: white;
     border-radius: 6px;
 }
+.delete-btn {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 6px 10px;
+    cursor: pointer;
+}
