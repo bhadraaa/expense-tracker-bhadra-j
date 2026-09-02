@@ -123,7 +123,7 @@ form.addEventListener("submit", function (event) {
 
         showMessage("Transaction updated successfully!");
     }
-
+    saveTransactions();
     displayTransactions();
     updateSummary();
 
@@ -202,6 +202,7 @@ transactionList.addEventListener("click", function (event) {
         transactions = transactions.filter(function (transaction) {
             return transaction.id !== id;
         });
+        saveTransactions();
 
         displayTransactions();
         updateSummary();
@@ -257,3 +258,17 @@ function updateSummary() {
     expensesElement.textContent = `₹${totalExpenses.toFixed(2)}`;
     balanceElement.textContent = `₹${balance.toFixed(2)}`;
 }
+
+function saveTransactions() {
+    localStorage.setItem("transactions", JSON.stringify(transactions));
+}
+function loadTransactions() {
+    const savedTransactions = localStorage.getItem("transactions");
+
+    if (savedTransactions) {
+        transactions = JSON.parse(savedTransactions);
+    }
+}
+loadTransactions();
+displayTransactions();
+updateSummary();
