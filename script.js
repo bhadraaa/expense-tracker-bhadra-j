@@ -83,3 +83,48 @@ function updateCategories() {
 }
 
 updateCategories();
+
+form.addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    const transaction = {
+        id: Date.now(),
+        type: currentType,
+        amount: Number(amountInput.value),
+        category: categoryInput.value,
+        date: dateInput.value,
+        description: descriptionInput.value
+    };
+
+    transactions.push(transaction);
+
+    console.log(transactions);
+
+    form.reset();
+
+    currentType = "expense";
+
+    typeButtons.forEach(function (button) {
+        button.classList.remove("active");
+    });
+
+    typeButtons[0].classList.add("active");
+
+    updateCategories();
+
+    formSection.classList.add("hidden");
+
+    showMessage("Transaction added successfully!");
+});
+function showMessage(message) {
+    const messageElement = document.createElement("p");
+
+    messageElement.textContent = message;
+    messageElement.className = "success-message";
+
+    document.body.appendChild(messageElement);
+
+    setTimeout(function () {
+        messageElement.remove();
+    }, 2000);
+}

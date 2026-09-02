@@ -228,3 +228,12 @@ header button,
     padding: 18px;
 }
 
+.success-message {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 12px 18px;
+    background: #2f6b4f;
+    color: white;
+    border-radius: 6px;
+}
