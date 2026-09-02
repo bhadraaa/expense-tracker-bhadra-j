@@ -98,6 +98,7 @@ form.addEventListener("submit", function (event) {
 
     transactions.push(transaction);
     displayTransactions();
+    updateSummary();
     console.log(transactions);
 
     form.reset();
@@ -152,4 +153,22 @@ function displayTransactions() {
 
         transactionList.appendChild(transactionElement);
     });
+}
+function updateSummary() {
+    let totalIncome = 0;
+    let totalExpenses = 0;
+
+    transactions.forEach(function (transaction) {
+        if (transaction.type === "income") {
+            totalIncome += transaction.amount;
+        } else {
+            totalExpenses += transaction.amount;
+        }
+    });
+
+    const balance = totalIncome - totalExpenses;
+
+    incomeElement.textContent = `₹${totalIncome.toFixed(2)}`;
+    expensesElement.textContent = `₹${totalExpenses.toFixed(2)}`;
+    balanceElement.textContent = `₹${balance.toFixed(2)}`;
 }
